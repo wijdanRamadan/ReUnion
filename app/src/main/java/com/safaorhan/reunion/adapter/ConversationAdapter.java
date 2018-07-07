@@ -78,12 +78,14 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
         View itemView;
         TextView opponentNameText;
         TextView lastMessageText;
+        TextView Letter1;
 
         public ConversationHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             opponentNameText = itemView.findViewById(R.id.opponentNameText);
             lastMessageText = itemView.findViewById(R.id.lastMessageText);
+            Letter1 = itemView.findViewById(R.id.letter);
         }
 
         public void bind(final Conversation conversation) {

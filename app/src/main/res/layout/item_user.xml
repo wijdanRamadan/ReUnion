@@ -16,7 +16,6 @@
         android:textStyle="normal"
         android:textColor="#ffffff"
         android:background="@drawable/magnitude_circle"
-        android:text="A"
 
         />
 
@@ -25,6 +24,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <TextView
+        android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -33,12 +33,14 @@
         android:textStyle="normal"
         android:textColor="#de000000"
         android:lineSpacingExtra="8sp"
-        android:text="Anwar"
+
 
         />
 
 
     <TextView
+
+        android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
