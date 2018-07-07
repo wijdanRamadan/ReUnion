@@ -48,28 +48,33 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEdit.getText().toString();
 
         isTryingToLogin = true;
-        FirebaseAuth
-                .getInstance()
-                .signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(LoginActivity.this, ConversationsActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Bad credentials", Toast.LENGTH_SHORT).show();
-                        }
+        if (!email.matches("") && !password.matches("")) {
+            FirebaseAuth
+                    .getInstance()
+                    .signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(LoginActivity.this, ConversationsActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Bad credentials", Toast.LENGTH_SHORT).show();
+                            }
 
-                        isTryingToLogin = false;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, "Check your connection..", Toast.LENGTH_SHORT).show();
-                        isTryingToLogin = false;
-                    }
-                });
-    }
-}
+                            isTryingToLogin = false;
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LoginActivity.this, "Check your connection..", Toast.LENGTH_SHORT).show();
+                            isTryingToLogin = false;
+                        }
+                    });
+        }
+
+        else
+        { Toast.makeText(LoginActivity.this, "please fill in all fields", Toast.LENGTH_SHORT).show();}
+
+}}
