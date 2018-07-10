@@ -26,7 +26,10 @@
     <!-- Magnitude circle color for an earthquake with magnitude between 7 and 8 -->
     <color name="magnitude7">#9c27b0</color>
 
-    <!-- Magnitude circle color for an earthquake with magnitude between 8 and 9 -->
     <color name="magnitude8">#f44336</color>
+
+    <color name="black">#de000000</color>
+    <color name="grey"> #8b000000</color>
+    <color name="white"> #fdfdfd</color>
 
 </resources>

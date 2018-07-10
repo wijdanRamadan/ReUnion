@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.safaorhan.reunion.R;
 import com.safaorhan.reunion.adapter.ConversationAdapter;
 
+
 public class ConversationsActivity extends AppCompatActivity implements ConversationAdapter.ConversationClickListener {
 
     private static final String TAG = ConversationsActivity.class.getSimpleName();
@@ -32,6 +33,7 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(conversationAdapter);
+
     }
 
     @Override
@@ -48,7 +50,8 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     @Override
     public void onConversationClick(DocumentReference conversationRef) {
-        
+
+
     }
 
     @Override
@@ -60,14 +63,14 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menu_people:
-                Intent intent = new Intent(this, UsersActivity.class);
-                startActivity(intent);
-                return true;
-            default:
+        int id = item.getItemId();
+        if (id == R.id.menu_people) {
+
+            Intent intent = new Intent(this, UsersActivity.class);
+            startActivity(intent);
+            return true;
+        }
                 return super.onOptionsItemSelected(item);
         }
     }
-}
+
