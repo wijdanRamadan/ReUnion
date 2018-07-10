@@ -30,9 +30,18 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-iid:16.0.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+
+
+
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-firestore:17.0.2'
+    //Firebase FCM
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+
 
     // Firebase UI
     implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'

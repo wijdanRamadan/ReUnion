@@ -81,13 +81,13 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
             this.itemView = itemView;
             nameText = itemView.findViewById(R.id.nameText);
             emailText = itemView.findViewById(R.id.emailText);
-            Letter =itemView.findViewById(R.id.letter);
+            Letter =itemView.findViewById(R.id.userFirstLetter);
         }
 
         public void bind(final User user) {
             nameText.setText(user.getName() + " " + user.getSurname());
             emailText.setText(user.getEmail());
-            Letter.setText(user.getName().charAt(0));
+            Letter.setText(" " +user.getName().charAt(0)+" ");
 
             if (user.getId().equals(FirebaseAuth.getInstance().getUid())) {
                 itemView.setOnClickListener(null);

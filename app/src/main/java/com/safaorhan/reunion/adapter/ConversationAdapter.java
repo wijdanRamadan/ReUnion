@@ -85,7 +85,7 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
             this.itemView = itemView;
             opponentNameText = itemView.findViewById(R.id.opponentNameText);
             lastMessageText = itemView.findViewById(R.id.lastMessageText);
-            Letter1 = itemView.findViewById(R.id.letter);
+            Letter1 = itemView.findViewById(R.id.conversationLetter);
         }
 
         public void bind(final Conversation conversation) {
@@ -104,6 +104,7 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User opponent = documentSnapshot.toObject(User.class);
                     opponentNameText.setText(opponent.getName());
+                    Letter1.setText(" "+opponent.getName().charAt(0) + " ");
                     itemView.setVisibility(View.VISIBLE);
                 }
             });
