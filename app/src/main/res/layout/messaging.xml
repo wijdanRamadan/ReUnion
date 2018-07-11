@@ -1,39 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/tile_blue_sprinkles"
-    tools:context=".activity.ConversationsActivity">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:orientation="vertical">
+
+
     <LinearLayout
-        android:layout_width="383dp"
-        android:layout_height="80dp"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:orientation="horizontal">
-        <EditText android:id="@+id/send_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="17dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/opponentNameText"
+            android:layout_width="37dp"
+            android:layout_height="24dp"
+            android:textColor="@color/black"
+            tools:text="haya"
             android:textSize="16sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="#de000000"
-            android:lineSpacingExtra="8sp"
-            tools:text="Hocam, don't get mad at me pleasee..."
-            />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="22dp"
-            android:src="@drawable/shape" />
+            android:lineSpacingExtra="8sp"/>
+
+        <TextView
+            android:id="@+id/lastMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:lineSpacingExtra="6sp"
+            tools:text="Now, can you do a successful gradle build?" />
+
+
+
     </LinearLayout>
-</FrameLayout>
+
+</android.support.v7.widget.CardView>

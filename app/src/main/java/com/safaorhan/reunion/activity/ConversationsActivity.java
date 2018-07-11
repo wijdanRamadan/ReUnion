@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import com.google.firebase.firestore.DocumentReference;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.safaorhan.reunion.R;
 import com.safaorhan.reunion.adapter.ConversationAdapter;
 
@@ -50,7 +51,8 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     @Override
     public void onConversationClick(DocumentReference conversationRef) {
-
+             Intent  x = new Intent(this , MessagingActivity.class);
+             startActivity(x);
 
     }
 
