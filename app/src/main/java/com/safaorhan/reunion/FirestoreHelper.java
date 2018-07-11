@@ -39,6 +39,8 @@ public class FirestoreHelper {
                 .collection("users");
     }
 
+
+
     public static void findOrCreateConversation(final DocumentReference opponentRef, final DocumentReferenceCallback callback) {
         getConversations()
                 .whereEqualTo(getMe().getId(), true)
@@ -123,7 +125,14 @@ public class FirestoreHelper {
     public static DocumentReference getConversationRef(Conversation conversation) {
         return getConversations().document(conversation.getId());
     }
+    public static CollectionReference getMessages() {
+        return FirebaseFirestore.getInstance()
+                .collection("messages");}
 
+    public static DocumentReference getMessageContent(Message message)
+    {
+        return getMessages().document(message.getText());
+    }
     public static DocumentReference getUserRef(User user) {
         return getUsers().document(user.getId());
     }

@@ -128,4 +128,5 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
     public interface ConversationClickListener {
         void onConversationClick(DocumentReference conversationRef);
     }
+
 }
