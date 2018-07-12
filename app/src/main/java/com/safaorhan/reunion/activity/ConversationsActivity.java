@@ -14,10 +14,13 @@ import android.view.MenuItem;
 import com.safaorhan.reunion.R;
 import com.safaorhan.reunion.adapter.ConversationAdapter;
 
+import java.io.Serializable;
+
 
 public class ConversationsActivity extends AppCompatActivity implements ConversationAdapter.ConversationClickListener {
 
     private static final String TAG = ConversationsActivity.class.getSimpleName();
+    public static  DocumentReference myConversationRef;
 
     RecyclerView recyclerView;
     ConversationAdapter conversationAdapter;
@@ -51,6 +54,7 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     @Override
     public void onConversationClick(DocumentReference conversationRef) {
+          myConversationRef =conversationRef;
              Intent  x = new Intent(this , MessagingActivity.class);
              startActivity(x);
 

@@ -22,7 +22,7 @@ import com.safaorhan.reunion.model.User;
 
 public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.MessageHolder> {
 
-    MessageAdapter.MessageClickListener MclickListner;
+
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -43,6 +43,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
     public static MAdapter get() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("messages")
+
                 .limit(50);
 
         FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
@@ -68,13 +69,13 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
         public MessageHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            opponentNameText=itemView.findViewById(R.id.opponentNameText);
-            lastMessageText=itemView.findViewById(R.id.lastMessageText);
+            opponentNameText=itemView.findViewById(R.id.textView);
+            lastMessageText=itemView.findViewById(R.id.textView1);
         }
 
         public void bind(final Message message)
         {
-            message.getFrom().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            message.getConversation().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     Message message = documentSnapshot.toObject(Message.class);

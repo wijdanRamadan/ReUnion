@@ -19,6 +19,7 @@ import com.safaorhan.reunion.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -110,6 +111,7 @@ public class FirestoreHelper {
                                 });
                     }
                 })
+
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
