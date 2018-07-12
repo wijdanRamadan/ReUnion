@@ -22,7 +22,7 @@ public class UsersActivity extends AppCompatActivity implements UserAdapter.User
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewUser);
 
         userAdapter = UserAdapter.get();
         userAdapter.setUserClickListener(this);

@@ -6,19 +6,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.safaorhan.reunion.R;
 import com.safaorhan.reunion.activity.MessagingActivity;
 import com.safaorhan.reunion.model.Conversation;
 import com.safaorhan.reunion.model.Message;
 import com.safaorhan.reunion.model.User;
+
+import static com.safaorhan.reunion.activity.ConversationsActivity.myConversationRef;
 
 public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.MessageHolder> {
 
@@ -35,7 +42,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
 
     @Override
     protected void onBindViewHolder(@NonNull MessageHolder holder, int position, @NonNull Message message) {
-        message.setText(getSnapshots().getSnapshot(position).get("text").toString());
+        message.setConversation(getSnapshots().getSnapshot(position).getDocumentReference("conversation"));
         holder.bind(message);
 
     }
@@ -43,7 +50,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
     public static MAdapter get() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("messages")
-
+                .whereEqualTo("conversation" , myConversationRef)
                 .limit(50);
 
         FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
@@ -57,7 +64,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
     @NonNull
     @Override
     public MessageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.messaging, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
         return new MessageHolder(itemView);
 
     }
@@ -70,20 +77,36 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
             super(itemView);
             this.itemView = itemView;
             opponentNameText=itemView.findViewById(R.id.textView);
-            lastMessageText=itemView.findViewById(R.id.textView1);
+            lastMessageText=itemView.findViewById(R.id.message);
         }
 
         public void bind(final Message message)
         {
-            message.getConversation().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    Message message = documentSnapshot.toObject(Message.class);
-                    opponentNameText.setText(message.getFrom().toString());
-                    lastMessageText.setText(message.getText());
-                    itemView.setVisibility(View.VISIBLE);
-                }
-            });
+
+
+
+
+            FirebaseFirestore.getInstance()
+                    .collection("messages")
+                    .whereEqualTo("conversation",myConversationRef)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                       Message message =document.toObject(Message.class);
+                                       lastMessageText.setText(message.getText());
+
+
+
+                                }
+                            }
+                        }
+                    });
+
+
 
 
         }

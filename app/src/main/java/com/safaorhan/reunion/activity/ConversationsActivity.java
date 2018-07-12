@@ -56,6 +56,7 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
     public void onConversationClick(DocumentReference conversationRef) {
           myConversationRef =conversationRef;
              Intent  x = new Intent(this , MessagingActivity.class);
+          x.putExtra("conversationId",myConversationRef.getId());
              startActivity(x);
 
     }
