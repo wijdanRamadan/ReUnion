@@ -2,6 +2,7 @@ package com.safaorhan.reunion.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,13 +51,14 @@ import static com.safaorhan.reunion.activity.ConversationsActivity.myConversatio
 
 public class MessagingActivity extends AppCompatActivity implements MAdapter.MessageClickListener{
 
+public static boolean sent = false;
 
     RecyclerView recyclerView;
 
     TextView Text;
 
 private RecyclerView recyclerview_message;
-Button b;
+FloatingActionButton b;
 MAdapter messageAdapter;
 EditText sendText;
 
@@ -82,8 +84,6 @@ EditText sendText;
              myMessage.setFrom(FirestoreHelper.getMe());
              myConversationRef.update("id" ,convId);
              FirestoreHelper.sendMessage(myMessage.getText().toString(),myConversationRef);
-              getMessagess(myConversationRef);
-
 
 
             }
@@ -99,32 +99,11 @@ EditText sendText;
     }
 
 
-    public void getMessagess(DocumentReference convRef)
-    {
-
-        FirebaseFirestore.getInstance()
-                .collection("messages")
-                .whereEqualTo("conversation",convRef)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-            if (task.isSuccessful()) {
-
-                for (QueryDocumentSnapshot document : task.getResult()) {
-
-                    Message message =document.toObject(Message.class);
-                    Toast.makeText(getApplicationContext(), message.getText(), Toast.LENGTH_SHORT).show();
-
-
-                }
-            }
-        }
-    });
+protected void onStart() {
+    super.onStart();
+    messageAdapter.startListening();
+}
 
 
 
-
-
-
-}}
+}

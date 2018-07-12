@@ -24,8 +24,7 @@ import com.safaorhan.reunion.model.User;
 public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, ConversationAdapter.ConversationHolder> {
     private static final String TAG = ConversationAdapter.class.getSimpleName();
     ConversationClickListener conversationClickListener;
-
-
+    public static User userInfo;
     public ConversationAdapter(@NonNull FirestoreRecyclerOptions<Conversation> options) {
         super(options);
     }
@@ -102,7 +101,9 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
             conversation.getOpponent().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+
                     User opponent = documentSnapshot.toObject(User.class);
+                    userInfo=opponent;
                     opponentNameText.setText(opponent.getName());
                     Letter1.setText(" "+opponent.getName().charAt(0) + " ");
                     itemView.setVisibility(View.VISIBLE);

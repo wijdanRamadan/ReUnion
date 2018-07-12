@@ -25,9 +25,15 @@ import com.safaorhan.reunion.model.Conversation;
 import com.safaorhan.reunion.model.Message;
 import com.safaorhan.reunion.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.safaorhan.reunion.activity.ConversationsActivity.myConversationRef;
+import static com.safaorhan.reunion.adapter.ConversationAdapter.userInfo;
 
 public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.MessageHolder> {
+
+  public static   ArrayList<Message> myMessagesList = new ArrayList<Message>();
 
 
     /**
@@ -53,6 +59,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
                 .whereEqualTo("conversation" , myConversationRef)
                 .limit(50);
 
+
         FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
                 .setQuery(query, Message.class)
                 .build();
@@ -64,7 +71,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
     @NonNull
     @Override
     public MessageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.messaging, parent, false);
         return new MessageHolder(itemView);
 
     }
@@ -77,20 +84,21 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
             super(itemView);
             this.itemView = itemView;
             opponentNameText=itemView.findViewById(R.id.textView);
-            lastMessageText=itemView.findViewById(R.id.message);
+            lastMessageText=itemView.findViewById(R.id.textView1);
         }
 
         public void bind(final Message message)
-        {
 
+        {
 
 
 
             FirebaseFirestore.getInstance()
                     .collection("messages")
                     .whereEqualTo("conversation",myConversationRef)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                     .limit(10)
+                     .get()
+                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
@@ -98,6 +106,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                        Message message =document.toObject(Message.class);
                                        lastMessageText.setText(message.getText());
+                                       opponentNameText.setText("you");
 
 
 
@@ -112,7 +121,33 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
         }
 
     }
-    public interface MessageClickListener {
+
+
+    public void getMessagess(DocumentReference convRef) {
+
+        FirebaseFirestore.getInstance()
+                .collection("messages")
+                .whereEqualTo("conversation", convRef)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                Message message = document.toObject(Message.class);
+                                myMessagesList.add(message);
+
+
+                            }
+                        }
+                    }
+                });
+
+
+    }
+        public interface MessageClickListener {
         void onMessageClick(DocumentReference conversationRef);
 
     }

@@ -1,7 +1,11 @@
 package com.safaorhan.reunion;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,7 +20,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.safaorhan.reunion.model.Conversation;
 import com.safaorhan.reunion.model.Message;
 import com.safaorhan.reunion.model.User;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class FirestoreHelper {
     private static final String TAG = FirestoreHelper.class.getSimpleName();
-
+ public static boolean sent=false;
     public static DocumentReference getMe() {
         String myId = FirebaseAuth
                 .getInstance()
@@ -94,19 +97,22 @@ public class FirestoreHelper {
         message.setText(messageText);
         message.setFrom(getMe());
         message.setConversation(conversationRef);
-
         FirebaseFirestore.getInstance()
                 .collection("messages")
                 .add(message)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+
                         conversationRef
                                 .update("lastMessage", documentReference)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+
                                         // Do nothing for now
+                                       sent=true;
+
                                     }
                                 });
                     }
@@ -119,6 +125,8 @@ public class FirestoreHelper {
                     }
                 });
     }
+
+
 
     public static CollectionReference getConversations() {
         return FirebaseFirestore.getInstance().collection("conversations");
