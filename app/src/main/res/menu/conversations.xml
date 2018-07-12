@@ -6,4 +6,8 @@
         android:title="@string/menu_people"
         android:icon="@drawable/ic_people"
         app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/log_out"
+        android:title="log out"
+        app:showAsAction="ifRoom"/>
 </menu>

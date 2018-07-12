@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 
 import android.support.v7.widget.RecyclerView;
@@ -77,6 +79,13 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
             startActivity(intent);
             return true;
         }
+        if(id==R.id.log_out)
+        {
+            FirebaseAuth.getInstance().signOut();
+            finish();
+            startActivity(new Intent(this,LoginActivity.class));
+        }
+
                 return super.onOptionsItemSelected(item);
         }
     }
