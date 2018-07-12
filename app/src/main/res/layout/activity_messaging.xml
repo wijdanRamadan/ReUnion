@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MessagingActivity"
+     >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewMessaging"
+        android:layout_width="match_parent"
+        android:layout_height="452dp"
+        android:background="@drawable/tile_blue_sprinkles"/>
+
+    <EditText
+        android:id="@+id/send_text"
+        android:layout_width="310dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="8sp"
+        android:textColor="#de000000"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        tools:text="Hocam, don't get mad at me pleasee..." />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="53dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/shape"
+        android:text="ghgh" />
+</FrameLayout>
