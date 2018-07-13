@@ -54,10 +54,9 @@ import static com.safaorhan.reunion.adapter.ConversationAdapter.layoutTitle;
 
 public class MessagingActivity extends AppCompatActivity implements MAdapter.MessageClickListener {
 
-    User x ;
-     ImageView tick;
+    User x;
+    ImageView tick;
     RecyclerView recyclerView;
-
     TextView Text;
 
     private RecyclerView recyclerview_message;
@@ -74,10 +73,9 @@ public class MessagingActivity extends AppCompatActivity implements MAdapter.Mes
         recyclerview_message.setLayoutManager(new LinearLayoutManager(this));
         recyclerview_message.setAdapter(messageAdapter);
         sendText = findViewById(R.id.send_text);
-        setTitle("chat with " + layoutTitle);
         Intent i = getIntent();
         final String convId = i.getStringExtra("conversationId");
-       tick=findViewById(R.id.tick);
+        tick = findViewById(R.id.tick);
         b = findViewById(R.id.fab);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +86,6 @@ public class MessagingActivity extends AppCompatActivity implements MAdapter.Mes
                 myConversationRef.update("id", convId);
                 FirestoreHelper.sendMessage(myMessage.getText().toString(), myConversationRef);
                 sendText.setText("");
-
 
 
             }
@@ -108,6 +105,44 @@ public class MessagingActivity extends AppCompatActivity implements MAdapter.Mes
         messageAdapter.startListening();
     }
 
+   /* public String getLayoutName(String convRef)
+    {
+        final String[] name = new String[1];
+        FirebaseFirestore
+                .getInstance()
+                .collection("conversations")
+                .whereEqualTo("id" ,convRef)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        final String[] name1 = new String[1];
+                        if(task.isSuccessful())
+                        {
+                            for (final QueryDocumentSnapshot document : task.getResult())
+                            {
+                                Conversation conv = document.toObject(Conversation.class);
+                                conv.getOpponent().get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful())
+                                                {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    User user = document.toObject(User.class);
+                                                    name[0] =user.getName();
+
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+        return name[0];
+    }
+    */
 
 }
 

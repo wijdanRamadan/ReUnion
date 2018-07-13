@@ -2,9 +2,12 @@ package com.safaorhan.reunion.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -12,7 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.safaorhan.reunion.R;
 import com.safaorhan.reunion.adapter.ConversationAdapter;
 
@@ -23,7 +31,7 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     private static final String TAG = ConversationsActivity.class.getSimpleName();
     public static  DocumentReference myConversationRef;
-
+    TextView opponentname;
     RecyclerView recyclerView;
     ConversationAdapter conversationAdapter;
 
@@ -56,9 +64,10 @@ public class ConversationsActivity extends AppCompatActivity implements Conversa
 
     @Override
     public void onConversationClick(DocumentReference conversationRef) {
-          myConversationRef =conversationRef;
+        myConversationRef =conversationRef;
              Intent  x = new Intent(this , MessagingActivity.class);
              x.putExtra("conversationId", conversationRef.getId());
+
              startActivity(x);
 
     }
