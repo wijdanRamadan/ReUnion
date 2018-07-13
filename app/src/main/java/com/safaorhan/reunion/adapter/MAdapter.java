@@ -2,9 +2,11 @@ package com.safaorhan.reunion.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +30,15 @@ import com.safaorhan.reunion.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.safaorhan.reunion.FirestoreHelper.getMe;
+import static com.safaorhan.reunion.FirestoreHelper.sent;
 import static com.safaorhan.reunion.activity.ConversationsActivity.myConversationRef;
-import static com.safaorhan.reunion.adapter.ConversationAdapter.userInfo;
+
+
 
 public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.MessageHolder> {
 
+public static String layoutTitle;
   public static   ArrayList<Message> myMessagesList = new ArrayList<Message>();
 
 
@@ -57,6 +63,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
         Query query = FirebaseFirestore.getInstance()
                 .collection("messages")
                 .whereEqualTo("conversation" , myConversationRef)
+                .orderBy("sentAt")
                 .limit(50);
 
 
@@ -80,19 +87,46 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
         View itemView;
         TextView opponentNameText;
         TextView lastMessageText;
+        ImageView tick ;
         public MessageHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             opponentNameText=itemView.findViewById(R.id.textView);
             lastMessageText=itemView.findViewById(R.id.textView1);
+            tick = itemView.findViewById(R.id.tick);
         }
 
         public void bind(final Message message)
 
         {
 
+            message.getFrom().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        final User opponent = document.toObject(User.class);
+                        opponentNameText.setText(opponent.getName());
 
+                        lastMessageText.setText(message.getText());
+                        getMe().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    User user = document.toObject(User.class);
+                                    if(user.getName().equals(opponent.getName()))
+                                    {
+                                        tick.setVisibility(View.VISIBLE);
+                                    }
 
+                                }
+                            }
+                        });
+                        }
+                }
+            });
+/*
             FirebaseFirestore.getInstance()
                     .collection("messages")
                     .whereEqualTo("conversation",myConversationRef)
@@ -106,7 +140,19 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                        Message message =document.toObject(Message.class);
                                        lastMessageText.setText(message.getText());
-                                       opponentNameText.setText("you");
+                                       message.getFrom().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                User opponent = document.toObject(User.class);
+                                                opponentNameText.setText(opponent.getName());
+
+                                            }
+                                        }
+                                    });
+
+
 
 
 
@@ -117,7 +163,7 @@ public class MAdapter   extends FirestoreRecyclerAdapter<Message, MAdapter.Messa
 
 
 
-
+*/
         }
 
     }

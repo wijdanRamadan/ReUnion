@@ -1,11 +1,7 @@
 package com.safaorhan.reunion;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,15 +16,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.safaorhan.reunion.model.Conversation;
 import com.safaorhan.reunion.model.Message;
 import com.safaorhan.reunion.model.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
 public class FirestoreHelper {
     private static final String TAG = FirestoreHelper.class.getSimpleName();
- public static boolean sent=false;
+    public static boolean sent = false;
+
     public static DocumentReference getMe() {
         String myId = FirebaseAuth
                 .getInstance()
@@ -44,7 +41,6 @@ public class FirestoreHelper {
     }
 
 
-
     public static void findOrCreateConversation(final DocumentReference opponentRef, final DocumentReferenceCallback callback) {
         getConversations()
                 .whereEqualTo(getMe().getId(), true)
@@ -58,30 +54,32 @@ public class FirestoreHelper {
                             participants.add(opponentRef);
 
                             final Conversation conversation = new Conversation();
+                            conversation.setId(getConversationId(opponentRef));
                             conversation.setParticipants(participants);
-                            getConversations()
-                                    .add(conversation)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(final DocumentReference conversationRef) {
-                                            HashMap<String, Object> updateFields = new HashMap<>();
-                                            updateFields.put(getMe().getId(), true);
-                                            updateFields.put(opponentRef.getId(), true);
-                                            conversationRef.update(updateFields)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            callback.onCompleted(conversationRef);
-                                                        }
-                                                    });
-                                        }
-                                    })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "onFailute", e);
+
+
+                            final DocumentReference conversationRef = getConversationRef(conversation);
+
+                            conversationRef.set(conversation).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                public void onSuccess(Void aVoid) {
+                                    HashMap<String, Object> updateFields = new HashMap<>();
+                                    updateFields.put(getMe().getId(), true);
+                                    updateFields.put(opponentRef.getId(), true);
+                                    conversationRef.update(updateFields)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    callback.onCompleted(conversationRef);
+                                                }
+                                            });
                                 }
-                            });
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                      @Override
+                                        public void onFailure(@NonNull Exception e) { Log.e(TAG, "onFailute", e);
+                                    }
+                                    });
                         } else {
                             DocumentSnapshot snapshot = snapshots.getDocuments().get(0);
                             Conversation conversation = snapshot.toObject(Conversation.class);
@@ -93,6 +91,7 @@ public class FirestoreHelper {
     }
 
     public static void sendMessage(final String messageText, final DocumentReference conversationRef) {
+        sent=false;
         final Message message = new Message();
         message.setText(messageText);
         message.setFrom(getMe());
@@ -109,9 +108,8 @@ public class FirestoreHelper {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-
                                         // Do nothing for now
-                                       sent=true;
+                                         sent = true;
 
                                     }
                                 });
@@ -127,7 +125,6 @@ public class FirestoreHelper {
     }
 
 
-
     public static CollectionReference getConversations() {
         return FirebaseFirestore.getInstance().collection("conversations");
     }
@@ -135,14 +132,16 @@ public class FirestoreHelper {
     public static DocumentReference getConversationRef(Conversation conversation) {
         return getConversations().document(conversation.getId());
     }
+
     public static CollectionReference getMessages() {
         return FirebaseFirestore.getInstance()
-                .collection("messages");}
+                .collection("messages");
+    }
 
-    public static DocumentReference getMessageContent(Message message)
-    {
+    public static DocumentReference getMessageContent(Message message) {
         return getMessages().document(message.getText());
     }
+
     public static DocumentReference getUserRef(User user) {
         return getUsers().document(user.getId());
     }
@@ -150,4 +149,22 @@ public class FirestoreHelper {
     public interface DocumentReferenceCallback {
         void onCompleted(DocumentReference documentReference);
     }
+
+    public static String getConversationId(DocumentReference opponentRef) {
+        String myId = getMe().getId();
+        String opponentId = opponentRef.getId();
+
+        if (myId.equals(opponentId)) {
+            throw new IllegalArgumentException("Your opponent cannot be null");
+        }
+
+        if (myId.compareTo(opponentId) > 0) {
+            return opponentId + "-" + myId;
+        } else {
+            return myId + "-" + opponentId;
+        }
+    }
+
+
 }
+

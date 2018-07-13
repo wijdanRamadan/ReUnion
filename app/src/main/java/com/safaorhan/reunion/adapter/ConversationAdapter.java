@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -23,8 +24,9 @@ import com.safaorhan.reunion.model.User;
 
 public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, ConversationAdapter.ConversationHolder> {
     private static final String TAG = ConversationAdapter.class.getSimpleName();
+    public static String layoutTitle;
     ConversationClickListener conversationClickListener;
-    public static User userInfo;
+
     public ConversationAdapter(@NonNull FirestoreRecyclerOptions<Conversation> options) {
         super(options);
     }
@@ -89,6 +91,7 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
 
         public void bind(final Conversation conversation) {
 
+
             itemView.setVisibility(View.INVISIBLE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -101,15 +104,14 @@ public class ConversationAdapter extends FirestoreRecyclerAdapter<Conversation, 
             conversation.getOpponent().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-
+                    layoutTitle="";
                     User opponent = documentSnapshot.toObject(User.class);
-                    userInfo=opponent;
                     opponentNameText.setText(opponent.getName());
                     Letter1.setText(" "+opponent.getName().charAt(0) + " ");
                     itemView.setVisibility(View.VISIBLE);
                 }
             });
-
+            layoutTitle=opponentNameText.getText().toString();
 
             if(conversation.getLastMessage() != null) {
                 conversation.getLastMessage().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
